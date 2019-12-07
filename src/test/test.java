@@ -32,9 +32,9 @@ public class test {
 
 
 
-        RadialHash hash1 = jpHash.getImageRadialHash("/Users/xkgoodbest/Programs/576_project/database_videos/starcraft/StarCraft001.rgb");
+        RadialHash hash1 = jpHash.getImageRadialHash("/Users/xkgoodbest/Programs/576_project/database_videos/traffic/traffic171.rgb");
         System.out.println("Hash1: " + hash1);
-        RadialHash hash2 = jpHash.getImageRadialHash("/Users/xkgoodbest/Programs/576_project/database_videos/starcraft/StarCraft003.rgb");
+        RadialHash hash2 = jpHash.getImageRadialHash("/Users/xkgoodbest/Programs/576_project/database_videos/traffic/traffic008.rgb");
         System.out.println("Hash2: " + hash2);
 
         System.out.println("Similarity: " + jpHash.getSimilarity(hash1, hash2));
