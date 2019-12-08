@@ -13,6 +13,7 @@ public class VideoSearch {
     private JFrame frame;
     Player qPlayer;
     Player rPlayer;
+    final static String[] baseNames = {"flowers", "interview", "movie", "musicvideo", "sports", "starcraft", "traffic"};
 
     public VideoSearch() {
         frame = new JFrame("baseFrame");

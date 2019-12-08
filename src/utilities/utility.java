@@ -1,6 +1,7 @@
 package utilities;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -10,13 +11,15 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class utility {
 
+
     public static BufferedImage getBufferedImage(String path) {
-        BufferedImage img = new BufferedImage(352, 288, BufferedImage.TYPE_INT_RGB);
+        BufferedImage img = new BufferedImage(352, 288, BufferedImage.TYPE_3BYTE_BGR);
         try{
             RandomAccessFile raf = new RandomAccessFile(path, "r");
             raf.seek(0);
@@ -67,4 +70,16 @@ public class utility {
         }
         return count;
     }
+
+    public static String[] readTXT(String path) throws FileNotFoundException {
+        Scanner sc = new Scanner(new File(path));
+        List<String> lines = new ArrayList<String>();
+        while (sc.hasNextLine()) {
+            lines.add(sc.nextLine());
+        }
+
+        String[] arr = lines.toArray(new String[0]);
+        return arr;
+    }
+
 }

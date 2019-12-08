@@ -59,7 +59,6 @@ public class test {
 //        long estimatedTime = System.currentTimeMillis() - startTime;
 //        System.out.println(estimatedTime);
 
-        double s = OtsuRun.xor("10101010","10101011");
-        System.out.println(s);
+        String[] x = utility.readTXT("/Users/xkgoodbest/Programs/576_project/765/data/phash/traffic.txt");
     }
 }

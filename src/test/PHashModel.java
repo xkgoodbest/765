@@ -30,6 +30,8 @@ public class PHashModel {
             i++;
         }
     }
+
+
     public void write() throws IOException{
         BufferedWriter outputWriter = null;
         outputWriter = new BufferedWriter(new FileWriter(this.dest));

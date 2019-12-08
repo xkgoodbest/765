@@ -28,35 +28,35 @@ public class RadialHashAlgorithm {
     }
 
     public static RadialHash getHash(String file) throws IOException {
-        BufferedImage img = new BufferedImage(352, 288, BufferedImage.TYPE_3BYTE_BGR);
-        try{
-            RandomAccessFile raf = new RandomAccessFile(file, "r");
-            raf.seek(0);
+//        BufferedImage img = new BufferedImage(352, 288, BufferedImage.TYPE_3BYTE_BGR);
+//        try{
+//            RandomAccessFile raf = new RandomAccessFile(file, "r");
+//            raf.seek(0);
+//
+//            byte[] bytes = new byte[(int) 352 * 288 * 3];
+//            raf.read(bytes);
+//
+//            int ind = 0;
+//            for (int y = 0; y < 288; y++) {
+//                for (int x = 0; x < 352; x++) {
+//                    byte r = bytes[ind];
+//                    byte g = bytes[ind + 288 * 352];
+//                    byte b = bytes[ind + 288 * 352 * 2];
+//
+//                    int pix = 0xff000000 | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+//                    img.setRGB(x, y, pix);
+//                    ind++;
+//                }
+//            }
+//        }catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-            byte[] bytes = new byte[(int) 352 * 288 * 3];
-            raf.read(bytes);
 
-            int ind = 0;
-            for (int y = 0; y < 288; y++) {
-                for (int x = 0; x < 352; x++) {
-                    byte r = bytes[ind];
-                    byte g = bytes[ind + 288 * 352];
-                    byte b = bytes[ind + 288 * 352 * 2];
-
-                    int pix = 0xff000000 | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
-                    img.setRGB(x, y, pix);
-                    ind++;
-                }
-            }
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        return getHash(img);
-//        return getHash(new File(file));
+//        return getHash(img);
+        return getHash(new File(file));
     }
 
     public static RadialHash getHash(File file) throws IOException {

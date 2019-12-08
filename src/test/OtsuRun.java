@@ -26,11 +26,10 @@ public class OtsuRun {
         thresholder.doThreshold(srcData, dstData);
 
         char[] dst = new char[dstData.length];
-        for(int i = 0; i < dstData.length; i++) {
+        for (int i = 0; i < dstData.length; i++) {
             if (dstData[i] == 0) {
                 dst[i] = '0';
-            }
-            else {
+            } else {
                 dst[i] = '1';
             }
         }
@@ -41,10 +40,10 @@ public class OtsuRun {
         char[] c1 = s1.toCharArray();
         char[] c2 = s2.toCharArray();
         int cnt = 0;
-        for(int i = 0; i < s1.length();i++) {
-            cnt += (int)(c1[i]^c2[i]);
+        for (int i = 0; i < s1.length(); i++) {
+            cnt += (int) (c1[i] ^ c2[i]);
         }
-        return cnt/(double)s1.length();
+        return 1.0 - cnt / (double) s1.length();
     }
 
     public static void main(String[] args) throws IOException {
@@ -52,21 +51,22 @@ public class OtsuRun {
         List<String> rgbFiles = utility.getRGBFiles("/Users/xkgoodbest/Programs/576_project/database_videos/traffic");
         String[] res = new String[600];
         int idx = 0;
-        for (String s: rgbFiles) {
+        for (String s : rgbFiles) {
             BufferedImage img = utility.getBufferedImage(s);
             res[idx] = o.getBinary(img);
+            System.out.println(res[idx]);
             idx++;
         }
 
-        BufferedWriter outputWriter = null;
-        outputWriter = new BufferedWriter(new FileWriter("/Users/xkgoodbest/Programs/576_project/765/data/Otsu/traffic.txt"));
-        for (int i = 0; i < res.length; i++) {
-            // Or:
-            outputWriter.write(res[i]);
-            outputWriter.newLine();
-        }
-        outputWriter.flush();
-        outputWriter.close();
+//        BufferedWriter outputWriter = null;
+//        outputWriter = new BufferedWriter(new FileWriter("/Users/xkgoodbest/Programs/576_project/765/data/Otsu/traffic.txt"));
+//        for (int i = 0; i < res.length; i++) {
+//            // Or:
+//            outputWriter.write(res[i]);
+//            outputWriter.newLine();
+//        }
+//        outputWriter.flush();
+//        outputWriter.close();
 
     }
 }
