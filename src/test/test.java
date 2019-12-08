@@ -1,12 +1,19 @@
 package test;
 
+import audioComparator.AudioChecker;
 import com.pragone.jphash.image.radial.RadialHash;
 import com.pragone.jphash.jpHash;
 import org.opencv.core.*;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
 import java.io.IOException;
+import java.util.List;
+import utilities.*;
 
 public class test {
     public static void main(String[] args) throws IOException {
@@ -32,11 +39,27 @@ public class test {
 
 
 
-        RadialHash hash1 = jpHash.getImageRadialHash("/Users/xkgoodbest/Programs/576_project/database_videos/traffic/traffic171.rgb");
-        System.out.println("Hash1: " + hash1);
-        RadialHash hash2 = jpHash.getImageRadialHash("/Users/xkgoodbest/Programs/576_project/database_videos/traffic/traffic008.rgb");
-        System.out.println("Hash2: " + hash2);
+//        RadialHash hash1 = jpHash.getImageRadialHash("/Users/xkgoodbest/Programs/576_project/database_videos/starcraft/StarCraft013.rgb");
+//        System.out.println("Hash1: " + hash1);
+//        RadialHash hash2 = jpHash.getImageRadialHash("/Users/xkgoodbest/Programs/576_project/query/first/first013.rgb");
+//        System.out.println("Hash2: " + hash2);
+//
+//        System.out.println("Similarity: " + jpHash.getSimilarity(hash1, hash2));
+//
+//        String f1 = "/Users/xkgoodbest/Programs/576_project/query/first/first.wav";
+//        String f2 = "/Users/xkgoodbest/Programs/576_project/database_videos/starcraft/StarCraft.wav";
+//        AudioChecker test = new AudioChecker(f1, f2);
+//        System.out.println("Similarity: " + test.compare());
 
-        System.out.println("Similarity: " + jpHash.getSimilarity(hash1, hash2));
+
+
+//        List<String> rgbFiles = utility.getRGBFiles("/Users/xkgoodbest/Programs/576_project/database_videos/sports");
+//        long startTime = System.currentTimeMillis();
+//        BufferedImage img = utility.getBufferedImage(rgbFiles.get(5));
+//        long estimatedTime = System.currentTimeMillis() - startTime;
+//        System.out.println(estimatedTime);
+
+        double s = OtsuRun.xor("10101010","10101011");
+        System.out.println(s);
     }
 }
