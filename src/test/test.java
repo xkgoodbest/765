@@ -59,6 +59,8 @@ public class test {
 //        long estimatedTime = System.currentTimeMillis() - startTime;
 //        System.out.println(estimatedTime);
 
-        String[] x = utility.readTXT("/Users/xkgoodbest/Programs/576_project/765/data/phash/traffic.txt");
+        DataLoader dl = new DataLoader();
+        dl.loadOTSU("data");
+        dl.loadPHash("data");
     }
 }

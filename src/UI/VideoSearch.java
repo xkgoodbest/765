@@ -1,5 +1,8 @@
 package UI;
 
+import utilities.Compare;
+import utilities.DataLoader;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,13 +10,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 //import org.opencv.core.Core;
 
 public class VideoSearch {
     private JFrame frame;
     Player qPlayer;
     Player rPlayer;
-    final static String[] baseNames = {"flowers", "interview", "movie", "musicvideo", "sports", "starcraft", "traffic"};
+    DataLoader dl;
+    JRadioButton[] matches;
+    java.util.List<BufferedImage> queryBI = new ArrayList<>();
+    Compare compare;
+
 
     public VideoSearch() {
         frame = new JFrame("baseFrame");
@@ -21,6 +29,9 @@ public class VideoSearch {
         frame.setVisible(true);
         addComponentsToPane(frame.getContentPane());
         frame.pack();
+        this.dl = new DataLoader();
+        this.dl.loadPHash("data");
+        this.dl.loadOTSU("data");
     }
 
     public void addComponentsToPane(Container pane) {
@@ -47,6 +58,8 @@ public class VideoSearch {
             public void actionPerformed(ActionEvent e) {
                 String path = queryBox.getText();
                 qPlayer = new Player(path, "Query", qPlayImg);
+                queryBI = qPlayer.pv.videoFrames;
+                compare = new Compare(dl,queryBI);
             }
         });
 
@@ -58,7 +71,7 @@ public class VideoSearch {
         pane.add(resultPanel, c);
 
         ButtonGroup bG = new ButtonGroup();
-        JRadioButton[] matches = new JRadioButton[3];
+        matches = new JRadioButton[3];
         matches[0] = new JRadioButton("/Users/xkgoodbest/Programs/576_project/database_videos/movie");
         matches[1] = new JRadioButton("/Users/xkgoodbest/Programs/576_project/database_videos/starcraft");
         matches[2] = new JRadioButton("/Users/xkgoodbest/Programs/576_project/database_videos/sports");
