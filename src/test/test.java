@@ -17,7 +17,7 @@ import utilities.*;
 
 public class test {
     public static void main(String[] args) throws IOException {
-//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 //        Mat source, template;
 //        //将文件读入为OpenCV的Mat格式
 //        source = Highgui.imread("/Users/xkgoodbest/Pictures/My Sony A6400/OUTPUT/DSC00138.jpg");
@@ -62,5 +62,6 @@ public class test {
         DataLoader dl = new DataLoader();
         dl.loadOTSU("data");
         dl.loadPHash("data");
+        dl.loadHistogram("data");
     }
 }
