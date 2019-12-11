@@ -1,28 +1,34 @@
 package histComparator;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
-import org.opencv.core.Range;
 import org.opencv.imgproc.Imgproc;
-import utilities.Compare;
-import utilities.DataLoader;
 import utilities.utility;
 
-import javax.imageio.ImageIO;
-
 public class CompareHist {
-    public Mat getHsvMat(String queryPath) {
-        BufferedImage img1 = utility.getBufferedImage(queryPath);
-        Mat srcBase = utility.bufferedImageToMat(img1);
+
+    private static final double BLACK_SIMILARITY = 0.5;
+    private static final String[] BASE_NAMES = {"flowers", "interview", "movie", "musicvideo", "sports", "StarCraft", "traffic"};
+    private int firstFrameIdx;
+    List<BufferedImage> queryVideo;
+    Map<String, List<Mat>> histMap;
+    int querySize;
+
+    public CompareHist(List<BufferedImage> queryVideo, Map<String, List<Mat>> histMap) {
+        this.queryVideo = queryVideo;
+        this.histMap = histMap;
+        this.firstFrameIdx = getFirstNonBlackFrame();
+        this.querySize = queryVideo.size();
+        System.out.println(querySize);
+    }
+
+    public Mat getHsvMat(BufferedImage bi) {
+        Mat srcBase = utility.bufferedImageToMat(bi);
 
         if (srcBase.empty()) {
             System.err.println("Cannot read the images");
@@ -55,46 +61,75 @@ public class CompareHist {
         return baseTest1;
     }
 
-    public static void main(String[] args) {
-        // Load the native OpenCV library
+    public List<HistResult> getHistSimilarity() {
+        List<HistResult> res = getBestMatchForFirstFrame();
 
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        for (int i = 0; i < 7; i++) {
+            String name = BASE_NAMES[i];
+            int startIdx = res.get(i).bestMatchIdx;
 
-        DataLoader dl = new DataLoader();
-        dl.loadHistogram("data");
+            startIdx--;
+            for (int j = firstFrameIdx - 1; j >= 0 && startIdx >= 0; j--) {
+                res.get(i).similarity[j] = getValue(compare(getHsvMat(queryVideo.get(j)), histMap.get(name).get(startIdx--)));
+            }
 
-        String[] baseNames = {"flowers", "interview", "movie", "musicvideo", "sports", "StarCraft", "traffic"};
+            startIdx = res.get(i).bestMatchIdx;
 
-        String queryPath = "/Users/kai/Documents/CSCI576/query_videos_2/SeenInexactMatch/HQ2/HQ2_003.rgb";
+            for (int j = firstFrameIdx; j < 150 && startIdx < 600; j++) {
+                //System.out.println(j + " " + startIdx);
+                res.get(i).similarity[j] = getValue(compare(getHsvMat(queryVideo.get(j)), histMap.get(name).get(startIdx++)));
+            }
+        }
+        Collections.sort(res);
+        for (HistResult r : res) {
+            System.out.println(r);
+        }
+        return res;
+    }
 
-        Map<String, List<Mat>> histogram = dl.getHistogram();
+    private double getValue(double val) {
+        return val < 0.0 ? 0.0 : Math.min(val, 1.0);
+    }
 
-        long start = System.currentTimeMillis();
-        CompareHist histComparator = new CompareHist();
+    public List<HistResult> getBestMatchForFirstFrame() {
+        BufferedImage img1 = queryVideo.get(firstFrameIdx);
+        Mat hsvBase = getHsvMat(img1);
 
-        Mat hsvBase = histComparator.getHsvMat(queryPath);
+        System.out.println("start hist");
 
-        double[] max = new double[7];
-        int[] idx = new int[7];
-        int j = 0;
-        for (String name : baseNames) {
+        List<HistResult> res = new ArrayList<>();
+
+        for (String name : BASE_NAMES) {
+            double[] sim = new double[600];
+            double max = 0.0;
+            int bestMatchIdx = 0;
             int i = 0;
-            for (Mat mat : histogram.get(name)) {
-                double tmp = histComparator.compare(hsvBase, mat);;
-                if (tmp > max[j]) {
-                    idx[j] = i;
-                    max[j] = tmp;
+            for (Mat mat : histMap.get(name)) {
+                double tmp = getValue(compare(hsvBase, mat));
+                if (tmp > max) {
+                    bestMatchIdx = i;
+                    max = tmp;
                 }
                 i++;
             }
-            j++;
+            res.add(new HistResult(sim, bestMatchIdx, max, name));
         }
+        return res;
+    }
 
-        for (int i = 0; i < 7; i++) {
-            System.out.println(max[i] + " " + idx[i] + " " + baseNames[i]);
+    private int getFirstNonBlackFrame() {
+        int res = 0;
+        Mat black = histMap.get("musicvideo").get(0);
+        while (res < this.queryVideo.size()) {
+            Mat candi = getHsvMat(this.queryVideo.get(res));
+            double simToBlack = compare(candi, black);
+            System.out.println("similar to black: " + simToBlack);
+            if (simToBlack < BLACK_SIMILARITY) {
+                System.out.println("similar to black: " + simToBlack);
+                break;
+            }
+            res = res + 4;
         }
-
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
+        return res > 150 ? 0 : res;
     }
 }

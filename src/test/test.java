@@ -3,6 +3,7 @@ package test;
 import audioComparator.AudioChecker;
 import com.pragone.jphash.image.radial.RadialHash;
 import com.pragone.jphash.jpHash;
+import histComparator.CompareHist;
 import org.opencv.core.*;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
@@ -12,6 +13,7 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import utilities.*;
 
@@ -63,5 +65,38 @@ public class test {
         dl.loadOTSU("data");
         dl.loadPHash("data");
         dl.loadHistogram("data");
+
+        String[] baseNames = {"flowers", "interview", "movie", "musicvideo", "sports", "StarCraft", "traffic"};
+
+        String queryPath = "/Users/kai/Documents/CSCI576/database/database_videos/musicvideo/musicvideo001.rgb";
+
+        HashMap<String, List<Mat>> histogram = dl.getHistogram();
+
+        HashMap<String, String[]> phashMap = dl.getPhash();
+
+        long start = System.currentTimeMillis();
+
+        RadialHash base = jpHash.getImageRadialHash(utility.getBufferedImage(queryPath));
+
+        double[] max = new double[7];
+        int[] idx = new int[7];
+        int j = 0;
+        for (String name : baseNames) {
+            for (int i = 0; i < 600; i++) {
+                double tmp = jpHash.getSimilarity(base, RadialHash.fromString((phashMap.get(name))[i]));
+                if (tmp > max[j]) {
+                    idx[j] = i;
+                    max[j] = tmp;
+                }
+            }
+            j++;
+        }
+
+        for (int i = 0; i < 7; i++) {
+            System.out.println(max[i] + " " + idx[i] + " " + baseNames[i]);
+        }
+
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
     }
 }

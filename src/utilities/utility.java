@@ -1,5 +1,7 @@
 package utilities;
 
+import com.pragone.jphash.image.radial.RadialHash;
+import com.pragone.jphash.jpHash;
 import org.apache.commons.io.FileUtils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -21,7 +23,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class utility {
-
 
     public static BufferedImage getBufferedImage(String path) {
         BufferedImage img = new BufferedImage(352, 288, BufferedImage.TYPE_3BYTE_BGR);
@@ -122,5 +123,4 @@ public class utility {
         mat.put(0, 0, data);
         return mat;
     }
-
 }
