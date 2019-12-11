@@ -5,6 +5,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -112,6 +113,13 @@ public class utility {
         }
         Mat mat = new Mat(288, 352, CvType.CV_8UC3);
         mat.put(0, 0, buffer);
+        return mat;
+    }
+
+    public static Mat bufferedImageToMat(BufferedImage bi) {
+        Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
+        byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
+        mat.put(0, 0, data);
         return mat;
     }
 

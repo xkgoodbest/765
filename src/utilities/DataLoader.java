@@ -9,9 +9,9 @@ import java.util.List;
 
 public class DataLoader {
     final static String[] baseNames = {"flowers", "interview", "movie", "musicvideo", "sports", "StarCraft", "traffic"};
-    HashMap<String, String[]> otsu;
-    HashMap<String, String[]> phash;
-    HashMap<String, List<Mat>> histogram;
+    private HashMap<String, String[]> otsu;
+    private HashMap<String, String[]> phash;
+    private HashMap<String, List<Mat>> histogram;
 
     public DataLoader() {
         this.otsu = new HashMap<>();
@@ -60,5 +60,17 @@ public class DataLoader {
         }
 
         System.out.println("hist done");
+    }
+
+    public HashMap<String, String[]> getOtsu() {
+        return otsu;
+    }
+
+    public HashMap<String, String[]> getPhash() {
+        return phash;
+    }
+
+    public HashMap<String, List<Mat>> getHistogram() {
+        return histogram;
     }
 }
