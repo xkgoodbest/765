@@ -112,7 +112,7 @@ public class CompareHist {
                 }
                 i++;
             }
-            res.add(new HistResult(sim, bestMatchIdx, max, name));
+            res.add(new HistResult(sim, bestMatchIdx, max, name, firstFrameIdx));
         }
         return res;
     }

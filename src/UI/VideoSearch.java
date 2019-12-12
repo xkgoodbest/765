@@ -20,8 +20,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class VideoSearch {
     private JFrame frame;
@@ -29,10 +35,11 @@ public class VideoSearch {
     Player rPlayer;
     DataLoader dl;
     JRadioButton[] matches;
-    java.util.List<BufferedImage> queryBI = new ArrayList<>();
+    List<BufferedImage> queryBI = new ArrayList<>();
     Compare compare;
-    List<HistResult> histResultList = new ArrayList<>();
     JSlider slider = new JSlider(JSlider.HORIZONTAL);
+    String queryPath = "";
+    List<HistResult> histResultList;
 
 
     public VideoSearch() {
@@ -70,12 +77,11 @@ public class VideoSearch {
         queryBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String path = queryBox.getText();
-                qPlayer = new Player(path, "Query", qPlayImg);
+                queryPath = queryBox.getText();
+                qPlayer = new Player(queryPath, "Query", qPlayImg);
                 queryBI = qPlayer.pv.videoFrames;
-                compare = new Compare(dl,queryBI);
-                CompareHist compareHist = new CompareHist(queryBI, dl.getHistogram());
-                histResultList = compareHist.getHistSimilarity();
+                compare = new Compare(dl, queryBI, getAudioQueryPath());
+                histResultList = compare.run();
 
                 matches[0].setText("db/" + histResultList.get(0).getName() + " Similarity:" +
                         String.format("%.2f", histResultList.get(0).getBestMatchSimilarity()));
@@ -296,6 +302,17 @@ public class VideoSearch {
         plot.getDomainAxis().setVisible(false);
         BufferedImage b = chart.createBufferedImage(352, 40);
         return b;
+    }
+
+    private String getAudioQueryPath() {
+        List<String> fileStrings = new ArrayList<>();
+        try (Stream<Path> walk = Files.walk(Paths.get(queryPath))) {
+            fileStrings = walk.map(x -> x.toString())
+                    .filter(f -> f.endsWith("wav")).collect(Collectors.toList());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fileStrings.get(0);
     }
 
     public static void main(String[] args) {

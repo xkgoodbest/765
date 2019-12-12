@@ -5,12 +5,14 @@ public class HistResult implements Comparable<HistResult> {
     int bestMatchIdx;
     double bestMatchSimilarity;
     String name;
+    int firstFrameIdx;
 
-    public HistResult(double[] similarity, int bestMatchIdx, double bestMatchSimilarity, String name) {
+    public HistResult(double[] similarity, int bestMatchIdx, double bestMatchSimilarity, String name, int firstFrameIdx) {
         this.similarity = similarity;
         this.bestMatchIdx = bestMatchIdx;
         this.bestMatchSimilarity = bestMatchSimilarity;
         this.name = name;
+        this.firstFrameIdx = firstFrameIdx;
     }
 
     @Override
@@ -36,5 +38,9 @@ public class HistResult implements Comparable<HistResult> {
 
     public String getName() {
         return name;
+    }
+
+    public int getFirstFrameIdx() {
+        return firstFrameIdx;
     }
 }
